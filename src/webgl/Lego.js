@@ -7,7 +7,7 @@ export default class Lego extends Object3D {
     constructor(options = {}) {
         super();
 
-        this.size = Math.max(options.size, 3);
+        this.size = options.size;
         this.color = options.color;
         this.altitude = options.altitude || 0;
         this.orientation = options.orientation;
@@ -47,6 +47,8 @@ export default class Lego extends Object3D {
         const loader = new GLTFLoader();
         const gltf = await loader.loadAsync('legos.glb');
         const obj = gltf.scene.getObjectByName(`Lego_${this.size}`);
+
+        console.log(`Lego_${this.size}`);
 
         obj.scale.set(0.5, 0.5, 0.5);
         obj.position.x = (this.size - 1) / 2;
