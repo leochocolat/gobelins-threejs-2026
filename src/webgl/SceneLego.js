@@ -29,8 +29,9 @@ export default class SceneLego extends Scene {
         this.renderer = options.renderer;
         this.debugger = options.debugger;
 
-        this.cameraManager = this.createCameraManager();
         this.fog = this.createFog();
+        this.debugFolder = this.createDebugFolder();
+        this.cameraManager = this.createCameraManager();
         this.envmap = this.createEnvmap();
         this.legoMaterial = this.createLegoMaterial();
         this.lego = this.createLego();
@@ -40,7 +41,6 @@ export default class SceneLego extends Scene {
         this.raycaster = new Raycaster();
         this.mousePosition = new Vector2();
         this.mouseGridPosition = new Vector2();
-        this.debugFolder = this.createDebugFolder();
         this.lightsManager = this.createLightsManager();
 
         this.setupEventListeners();
@@ -153,7 +153,7 @@ export default class SceneLego extends Scene {
             size: randomSize,
             orientation: orientation,
             altitude: this.altitude,
-            material: this.legoMaterial,
+            material: this.legoMaterial.clone(),
         });
 
         this.add(lego);
@@ -261,11 +261,11 @@ export default class SceneLego extends Scene {
         fogFolder.addBinding(this.fog, 'far', { min: 0, max: 100 });
         fogFolder.addBinding(this.fog, 'color');
 
-        const materialFolder = sceneFolder.addFolder({ title: 'Material' });
-        materialFolder.addBinding(this.legoMaterial, 'roughness');
-        materialFolder.addBinding(this.legoMaterial, 'metalness');
-        materialFolder.addBinding(this.legoMaterial, 'clearcoat');
-        materialFolder.addBinding(this.legoMaterial, 'clearcoatRoughness');
+        // const materialFolder = sceneFolder.addFolder({ title: 'Material' });
+        // materialFolder.addBinding(this.legoMaterial, 'roughness');
+        // materialFolder.addBinding(this.legoMaterial, 'metalness');
+        // materialFolder.addBinding(this.legoMaterial, 'clearcoat');
+        // materialFolder.addBinding(this.legoMaterial, 'clearcoatRoughness');
 
         return sceneFolder;
     }

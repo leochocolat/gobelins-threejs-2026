@@ -8,6 +8,10 @@ export default class LightsManager {
         this.debugger = options.debugger;
         this.cameraManager = options.cameraManager;
 
+        this.settings = {
+            helper: false,
+        };
+
         this.ambient = this.createAmbient();
         this.directional = this.createDirectional();
 
@@ -32,11 +36,13 @@ export default class LightsManager {
         directional.helper = new DirectionalLightHelper(directional, 1, 0xff0000);
         directional.controls = new TransformControls(this.cameraManager.camera, this.renderer.domElement);
 
-        directional.controls.attach(directional);
         this.scene.add(directional.controls.getHelper());
 
         this.scene.add(directional);
         this.scene.add(directional.helper);
+
+        if (this.settings.helper) directional.controls.attach(directional);
+        if (!this.settings.helper) directional.helper.visible = false;
 
         return directional;
     }
@@ -71,10 +77,21 @@ export default class LightsManager {
 
         const lightsFolder = this.debugger.addFolder({ title: 'Lights' });
 
+        console.log(this.directional.controls);
+
         lightsFolder.addBinding(this.ambient, 'color', { label: 'Ambient Color' });
         lightsFolder.addBinding(this.ambient, 'intensity', { label: 'Ambient Intensity' });
         lightsFolder.addBinding(this.directional, 'color', { label: 'Directional Color' });
         lightsFolder.addBinding(this.directional, 'intensity', { label: 'Directional Intensity' });
+        lightsFolder.addBinding(this.settings, 'helper', { label: 'Helper' }).on('change', () => {
+            if (this.settings.helper) {
+                this.directional.controls.attach(this.directional);
+                this.directional.helper.visible = true;
+            } else {
+                this.directional.controls.detach();
+                this.directional.helper.visible = false;
+            }
+        });
 
         return lightsFolder;
     }
