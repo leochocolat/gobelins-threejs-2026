@@ -1,5 +1,4 @@
 import { BoxGeometry, CylinderGeometry, Mesh, Object3D } from 'three';
-import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 
 const ROTATION_STEP = Math.PI / 2;
 
@@ -12,6 +11,7 @@ export default class Lego extends Object3D {
         this.altitude = options.altitude || 0;
         this.orientation = options.orientation;
         this.material = options.material;
+        this.gltf = options.gltf;
 
         this.material.color.set(this.color);
 
@@ -44,11 +44,8 @@ export default class Lego extends Object3D {
     }
 
     async createLegoWithModel() {
-        const loader = new GLTFLoader();
-        const gltf = await loader.loadAsync('legos.glb');
-        const obj = gltf.scene.getObjectByName(`Lego_${this.size}`);
-
-        console.log(`Lego_${this.size}`);
+        const scene = this.gltf.scene.clone();
+        const obj = scene.getObjectByName(`Lego_${this.size}`);
 
         obj.scale.set(0.5, 0.5, 0.5);
         obj.position.x = (this.size - 1) / 2;

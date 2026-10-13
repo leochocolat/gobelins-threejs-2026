@@ -1,6 +1,7 @@
 import { WebGLRenderer } from 'three';
 import { Pane } from 'tweakpane';
 import SceneLego from './SceneLego';
+import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 
 const GRID_SIZE = 101;
 
@@ -11,11 +12,8 @@ export default class WebGLApplication {
 
         this.renderer = this.createRenderer();
         this.debugger = this.createDebugger();
-        this.sceneLego = this.createSceneLego();
 
-        this.resize();
-
-        this.setupEventListeners();
+        this.start();
     }
 
     /**
@@ -25,6 +23,18 @@ export default class WebGLApplication {
     /**
      * Private
      */
+    async start() {
+        const loader = new GLTFLoader();
+
+        this.legoGltf = await loader.loadAsync('legos.glb');
+
+        this.sceneLego = this.createSceneLego();
+
+        this.resize();
+
+        this.setupEventListeners();
+    }
+
     createRenderer() {
         const renderer = new WebGLRenderer({
             canvas: document.querySelector('canvas'),
@@ -39,6 +49,7 @@ export default class WebGLApplication {
         const scene = new SceneLego({
             renderer: this.renderer,
             debugger: this.debugger,
+            legoGltf: this.legoGltf,
         });
 
         return scene;

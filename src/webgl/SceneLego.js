@@ -30,6 +30,7 @@ export default class SceneLego extends Scene {
 
         this.renderer = options.renderer;
         this.debugger = options.debugger;
+        this.legoGltf = options.legoGltf;
 
         this.mouseCellX = 0;
         this.mouseCellY = 0;
@@ -188,6 +189,7 @@ export default class SceneLego extends Scene {
             orientation: orientation,
             altitude: altitude,
             material: this.legoMaterial.clone(),
+            gltf: this.legoGltf,
         });
 
         this.add(lego);
@@ -362,7 +364,7 @@ export default class SceneLego extends Scene {
 
         if (dist > threshold) return;
 
-        this.createLego(2);
+        this.createLego();
     }
 
     mousemoveHandler(e) {
